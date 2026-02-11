@@ -12,8 +12,8 @@ const nextConfig: NextConfig = {
   
   // Turbopack configuration (Next.js 16 default for dev)
   turbopack: {
-    // Set the root directory to silence workspace warning
-    root: '.',
+    // Set the absolute root directory to silence workspace warning
+    root: process.cwd(),
     // Configure Turbopack for development
     rules: {
       // Handle any special file types if needed

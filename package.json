@@ -23,6 +23,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@types/jspdf": "^1.3.3",
     "@types/puppeteer": "^5.4.7",
+    "critters": "^0.0.23",
     "docx": "^9.5.1",
     "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
