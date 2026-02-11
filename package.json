@@ -7,16 +7,17 @@
     "npm": ">=9.0.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build --webpack",
+    "dev": "next dev --turbopack",
+    "dev:webpack": "next dev --webpack",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
     "start": "node server.js",
     "start:next": "next start",
-    "lint": "eslint",
+    "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "postinstall": "node -e \"try { require('fs').chmodSync('node_modules/.bin/next', '755') } catch(e) { console.log('chmod not needed on this platform') }\"",
-    "deploy": "npm run build && echo Build complete! Upload .next folder to Hostinger."
+    "postinstall": "node -e \"try { const fs = require('fs'); const path = require('path'); const binPath = path.join(__dirname, 'node_modules', '.bin', 'next'); if (fs.existsSync(binPath)) { fs.chmodSync(binPath, '755'); console.log('✅ Set executable permissions for next binary'); } } catch(e) { console.log('ℹ️ chmod not needed on this platform'); }\"",
+    "deploy": "npm run build && echo '✅ Build complete! Upload .next folder to Hostinger.'"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

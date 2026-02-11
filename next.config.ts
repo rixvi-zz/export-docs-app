@@ -10,8 +10,15 @@ const nextConfig: NextConfig = {
   // Next.js 16+ configuration for Puppeteer
   serverExternalPackages: ['puppeteer'],
   
-  // Use webpack instead of Turbopack for production
-  turbopack: {},
+  // Turbopack configuration (Next.js 16 default for dev)
+  turbopack: {
+    // Set the root directory to silence workspace warning
+    root: '.',
+    // Configure Turbopack for development
+    rules: {
+      // Handle any special file types if needed
+    },
+  },
   
   // Production optimizations for shared hosting
   experimental: {
@@ -19,28 +26,31 @@ const nextConfig: NextConfig = {
     optimizeCss: true,
   },
   
-  // Webpack configuration for better compatibility
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      // Ensure Puppeteer is external on server
-      config.externals = config.externals || [];
-      config.externals.push('puppeteer');
-    }
-    
-    // Optimize for shared hosting
-    config.optimization = {
-      ...config.optimization,
-      splitChunks: {
-        chunks: 'all',
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
+  // Webpack configuration for production builds only
+  webpack: (config, { isServer, dev }) => {
+    // Only apply webpack config in production builds
+    if (!dev) {
+      if (isServer) {
+        // Ensure Puppeteer is external on server
+        config.externals = config.externals || [];
+        config.externals.push('puppeteer');
+      }
+      
+      // Optimize for shared hosting in production
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+            },
           },
         },
-      },
-    };
+      };
+    }
     
     return config;
   },
@@ -52,6 +62,12 @@ const nextConfig: NextConfig = {
   
   // Disable source maps in production for smaller builds
   productionBrowserSourceMaps: false,
+  
+  // Ensure proper static file handling
+  trailingSlash: false,
+  
+  // Disable x-powered-by header
+  poweredByHeader: false,
 };
 
 export default nextConfig;
